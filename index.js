@@ -24,11 +24,22 @@ Sentry.init({
 });
 
 const express = require('express');
+const cors = require('cors');
 const { GoogleGenAI } = require('@google/genai');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 
 const app = express();
+
+// ============================================================
+// CORS MIDDLEWARE (for Swagger UI frontend access)
+// ============================================================
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:8080', 'https://ops-watch-api-project.vercel.app'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
+  optionsSuccessStatus: 200
+}));
 
 app.use(express.json());
 
