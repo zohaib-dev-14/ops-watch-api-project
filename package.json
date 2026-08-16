@@ -1,0 +1,21 @@
+{
+  "name": "opswatch-api",
+  "version": "1.0.0",
+  "description": "OpsWatch API — DevOps server monitoring and error-tracking backend with Sentry, Gemini AI, and Swagger UI",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.0.0",
+    "@sentry/node": "^8.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "keywords": ["devops", "monitoring", "sentry", "gemini", "swagger", "express"],
+  "author": "Muhammad Zohaib",
+  "license": "MIT"
+}
