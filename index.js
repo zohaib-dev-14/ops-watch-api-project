@@ -170,15 +170,50 @@ const swaggerSpec = swaggerJsdoc({
   apis: ['./index.js'],
 });
 
-app.use(
-  '/docs',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec, {
-    explorer: true,
-    customSiteTitle: 'OpsWatch API — Swagger UI',
-    customCss: '.swagger-ui .topbar { display: none }',
-  })
-);
+// Serve Swagger UI using CDN for better Vercel compatibility
+app.get('/docs', (req, res) => {
+  const html = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>OpsWatch API — Swagger UI</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+      <style>
+        .topbar { display: none; }
+        body { margin: 0; padding: 0; }
+      </style>
+    </head>
+    <body>
+      <div id="swagger-ui"></div>
+      <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-standalone-preset.js"></script>
+      <script>
+        window.onload = function() {
+          SwaggerUIBundle({
+            url: '/api/swagger-json',
+            dom_id: '#swagger-ui',
+            presets: [
+              SwaggerUIBundle.presets.apis,
+              SwaggerUIStandalonePreset
+            ],
+            layout: 'StandaloneLayout',
+            explorer: true
+          });
+        };
+      </script>
+    </body>
+    </html>
+  `;
+  res.setHeader('Content-Type', 'text/html');
+  res.send(html);
+});
+
+// Serve Swagger JSON spec
+app.get('/api/swagger-json', (req, res) => {
+  res.json(swaggerSpec);
+});
 
 // ============================================================
 // 4) ROUTES
